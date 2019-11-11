@@ -12,14 +12,14 @@ type HeapCallback func(interface{}, []interface{})
 //
 // this is a *generic* routine and may be reused for many tests.
 //
-func Heap(t interface{}, run HeapCallback, a []interface{}, size int) {
+func Heap(data interface{}, run HeapCallback, a []interface{}, size int) {
 	// when the size becomes 1, we run the permutationTest with the permuted array
 	if size == 1 {
-		run(t, a)
+		run(data, a)
 		return
 	}
 	for i := 0; i < size; i++ {
-		Heap(t, run, a, size-1)
+		Heap(data, run, a, size-1)
 		if size%2 == 1 {
 			a[0], a[size-1] = a[size-1], a[0]
 		} else {

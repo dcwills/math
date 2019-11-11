@@ -10,16 +10,16 @@ import (
 // verifies that heapPermutation tries every possible permutation exactly once.
 func Test_HeapPermutation(t *testing.T) {
 	type TestData struct {
-		t *testing.T
+		t   *testing.T
 		set []bool
 	}
 	run := func(td interface{}, a []interface{}) {
 		testData := td.(*TestData)
-		arr := make([]int, len(a)+1)
+		arr := make([]int, len(a))
 		for i, v := range a {
-			arr[i+1] = v.(int)
+			arr[i] = v.(int)
 		}
-		rank := rankParksWills0(arr)
+		rank := rankParksWills(arr)
 		set := testData.set
 		if rank > len(set) || set[rank] {
 			testData.t.Errorf("duplicate permutation = %v", rank)
@@ -28,8 +28,8 @@ func Test_HeapPermutation(t *testing.T) {
 	}
 
 	type args struct {
-		run  HeapCallback
-		a    []int
+		run HeapCallback
+		a   []int
 	}
 	tests := []struct {
 		name string
@@ -39,14 +39,14 @@ func Test_HeapPermutation(t *testing.T) {
 			"random 3",
 			args{
 				run,
-				[]int{3, 1, 2},
+				[]int{0, 1, 2},
 			},
 		},
 		{
 			"basic 6",
 			args{
 				run,
-				[]int{1, 2, 3, 4, 5, 6},
+				[]int{0, 1, 2, 3, 4, 5},
 			},
 		},
 	}
@@ -58,8 +58,7 @@ func Test_HeapPermutation(t *testing.T) {
 			for i, v := range tt.args.a {
 				array[i] = v
 			}
-			var factorial = []int{1, 1, 2, 6, 24, 120, 720, 5040}
-			Heap(&TestData{t, make([]bool, factorial[n])}, tt.args.run, array, n)
+			Heap(&TestData{t, make([]bool, factorial(n))}, tt.args.run, array, n)
 		})
 	}
 }
